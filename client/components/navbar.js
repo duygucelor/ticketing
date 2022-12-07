@@ -10,19 +10,19 @@ export default ({ currentUser }) => {
     .map(({ label, path }) => {
       return (
         <li key={path} className="nav-item">
-          <Link class="" href={path} className="nav-link">
+          <Link href={path} className="nav-link">
             {label}
           </Link>
         </li>
       );
     });
   return (
-    <nav class="navbar navbar-light bg-light p-2">
+    <nav className="navbar navbar-light bg-light p-2">
       <Link href="/" className="navbar-brand">
         Tix
       </Link>
-      <div class="d-flex justify content-end">
-        <ul class="nav d-flex align-items-center">{links}</ul>
+      <div className="d-flex justify content-end">
+        <ul className="nav d-flex align-items-center">{links}</ul>
       </div>
     </nav>
   );
