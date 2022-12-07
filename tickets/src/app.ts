@@ -4,6 +4,7 @@ import { json } from "body-parser";
 import cookieSession from "cookie-session";
 import { errorHandler, NotFoundError,checkCurrentUser } from "@tixcuborg/common";
 import { createTicketRouter } from "./routes/createTicket";
+import { getTicketRouter } from "./routes/getTicket";
 
 const app = express();
 app.set("trust proxy", true);
@@ -19,6 +20,7 @@ app.use(
 app.use(checkCurrentUser)
 
 app.use(createTicketRouter)
+app.use(getTicketRouter)
 
 app.all("*", async (req, res) => {
   throw new NotFoundError();

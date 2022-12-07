@@ -42,7 +42,7 @@ it("creates a ticket successfully", async () => {
   const response = await request(app)
     .post("/api/tickets")
     .set("Cookie", signin())
-    .send({ title: "concert", price: 40, userId:'id123456789' })
+    .send({ title: "concert", price: 40 })
     .expect(201);
 
   tickets = await Ticket.find({});
