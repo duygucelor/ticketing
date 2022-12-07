@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { checkCurrentUser } from "../middlewares/currentUser";
+import { checkCurrentUser } from "@tixcuborg/common";
 
 const router = express.Router();
 

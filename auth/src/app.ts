@@ -6,8 +6,7 @@ import { currentUserRouter } from "./routes/currentUser";
 import { signInRouter } from "./routes/signIn";
 import { signOutRouter } from "./routes/signOut";
 import { signUpRouter } from "./routes/singUp";
-import { errorHandler } from "./middlewares/errorHandler";
-import { NotFoundError } from "./errors/notFoundError";
+import { errorHandler, NotFoundError } from "@tixcuborg/common";
 
 const app = express();
 app.set("trust proxy", true);

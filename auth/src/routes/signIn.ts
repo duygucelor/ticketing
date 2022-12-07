@@ -1,8 +1,7 @@
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import jwt from "jsonwebtoken";
-import { BadRequestError } from "../errors/badRequestError";
-import { validateRequest } from "../middlewares/requestValidation";
+import { BadRequestError, validateRequest } from "@tixcuborg/common";
 import { User } from "../models/user";
 import { Password } from "../utils.ts/password";
 
