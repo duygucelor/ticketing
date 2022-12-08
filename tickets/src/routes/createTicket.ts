@@ -12,7 +12,7 @@ router.post(
     body("title").not().isEmpty().isString().withMessage("Title is required"),
     body("price")
       .isFloat({ gt: 0 })
-      .withMessage("Prioce must be greater than 0"),
+      .withMessage("Price must be positif"),
   ],
   validateRequest,
   async (req: Request, res: Response) => {

@@ -1,6 +1,5 @@
 import express, { Request, Response } from "express";
 import { NotFoundError, requireAuth } from "@tixcuborg/common";
-import { body } from "express-validator";
 import { Ticket } from "../models/ticket";
 
 const router = express.Router();
@@ -17,4 +16,4 @@ router.get(
   }
 );
 
-export { router as getTicketRouter };
+export { router as getTicketByIdRouter };
