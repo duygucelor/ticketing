@@ -7,6 +7,8 @@ import {
 } from "@tixcuborg/common";
 import { Ticket } from "../models/ticket";
 import { body } from "express-validator";
+import { natsWrapper } from "../natsWrapper";
+import { TicketUpdatedPublisher } from "../events/publishers/ticketUpdatedPublisher";
 
 const router = express.Router();
 
@@ -30,6 +32,13 @@ router.put(
     }
     ticket.set({ title: req.body.title, price: req.body.price });
     await ticket.save();
+    new TicketUpdatedPublisher(natsWrapper.client).publish({
+      id: ticket.id,
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId,
+    });
+
     res.send(ticket);
   }
 );

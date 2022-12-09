@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get(
   "/api/tickets/:id",
-  requireAuth,
+  requireAuth, 
   async (req: Request, res: Response) => {
     const ticket = await Ticket.findById(req.params.id);
     if (!ticket) {
