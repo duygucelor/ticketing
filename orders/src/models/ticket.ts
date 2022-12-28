@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import { Order } from "./order";
 
 interface TicketAttributes {
+  id: string;
   title: string;
   price: number;
 }
@@ -23,11 +24,11 @@ const ticketSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    price:{
+    price: {
       type: Number,
       required: true,
-      min:0  
-    }
+      min: 0,
+    },
   },
   {
     toJSON: {
@@ -41,12 +42,16 @@ const ticketSchema = new mongoose.Schema(
 );
 
 ticketSchema.statics.build = (attributes: TicketAttributes) => {
-  return new Ticket(attributes);
+  return new Ticket({
+    _id: attributes.id,
+    title: attributes.title,
+    price: attributes.price,
+  });
 };
 
-ticketSchema.methods.isReserved = async function (){
+ticketSchema.methods.isReserved = async function () {
   const existingOrder = await Order.findOne({
-    ticket: this,
+    ticket: this as any,
     status: {
       $in: [
         OrderStatus.Created,
@@ -55,8 +60,8 @@ ticketSchema.methods.isReserved = async function (){
       ],
     },
   });
-  return !!existingOrder
-}
+  return !!existingOrder;
+};
 
 const Ticket = mongoose.model<TicketDoc, TicketModel>("Ticket", ticketSchema);
 

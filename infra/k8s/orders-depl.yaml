@@ -14,13 +14,13 @@ spec:
     spec:
       containers:
         - name: orders
-          image: cygnetops/orders
+          image: dcelor/orders
           env:
             - name: NATS_CLIENT_ID
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: NATS_URL
+            - name: NATS_URI
               value: 'http://nats-srv:4222'
             - name: NATS_CLUSTER_ID
               value: ticketing
