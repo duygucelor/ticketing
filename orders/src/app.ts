@@ -5,7 +5,7 @@ import cookieSession from "cookie-session";
 import { errorHandler, NotFoundError,checkCurrentUser } from "@tixcuborg/common";
 import { createOrderRouter } from "./routes/create";
 import { getOrderByIdRouter } from "./routes/get";
-import {getAllOrdersRouter} from "./routes/getAll"
+import {getUserOrdersRouter} from "./routes/getAll"
 import {deleteOrderRouter} from './routes/delete'
 
 const app = express();
@@ -23,7 +23,7 @@ app.use(checkCurrentUser)
 
 app.use(createOrderRouter)
 app.use(getOrderByIdRouter)
-app.use(getAllOrdersRouter)
+app.use(getUserOrdersRouter)
 app.use(deleteOrderRouter)
 
 app.all("*", async (req, res) => {

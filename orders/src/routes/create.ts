@@ -8,7 +8,6 @@ import {
   validateRequest,
 } from "@tixcuborg/common";
 import { body } from "express-validator";
-import { natsWrapper } from "../natsWrapper";
 import { Order } from "../models/order";
 import { Ticket } from "../models/ticket";
 
@@ -45,7 +44,7 @@ router.post(
       ticket
     });
     await order.save();
-    
+
     // await new TicketCreatedPublisher(natsWrapper.client).publish(
     //   {
     //     id:ticket.id,

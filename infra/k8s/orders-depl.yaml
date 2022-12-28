@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: orders-depl
 spec:
-  replicas: 1 
+  replicas: 1
   selector:
     matchLabels:
       app: orders
@@ -13,17 +13,17 @@ spec:
         app: orders
     spec:
       containers:
-        - name: orders 
-          image: dcelor/orders
+        - name: orders
+          image: cygnetops/orders
           env:
-            - name: NATS_URI
-              value: 'http://nats-srv:4222'    
-            - name: NATS_CLUSTER_ID
-              value: 'ticketing'
             - name: NATS_CLIENT_ID
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name                                   
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: ticketing
             - name: MONGO_URI
               value: 'mongodb://orders-mongo-srv:27017/orders'
             - name: JWT_KEY
