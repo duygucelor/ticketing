@@ -1,5 +1,6 @@
 import { OrderStatus } from "@tixcuborg/common";
 import mongoose from "mongoose";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 import { Order } from "./order";
 
 interface TicketAttributes {
@@ -11,11 +12,16 @@ interface TicketAttributes {
 export interface TicketDoc extends mongoose.Document {
   title: string;
   price: number;
+  version: number;
   isReserved(): Promise<boolean>;
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
   build(attributes: TicketAttributes): TicketDoc;
+  findByIdAndPreviousVersion(event: {
+    id: string;
+    version: number;
+  }): Promise<TicketDoc | null>;
 }
 
 const ticketSchema = new mongoose.Schema(
@@ -41,11 +47,24 @@ const ticketSchema = new mongoose.Schema(
   }
 );
 
+ticketSchema.set("versionKey", "version");
+ticketSchema.plugin(updateIfCurrentPlugin);
+
 ticketSchema.statics.build = (attributes: TicketAttributes) => {
   return new Ticket({
     _id: attributes.id,
     title: attributes.title,
     price: attributes.price,
+  });
+};
+
+ticketSchema.statics.findByIdAndPreviousVersion = (event: {
+  id: string;
+  version: number;
+}) => {
+  return Ticket.findOne({
+    _id: event.id,
+    version: event.version - 1,
   });
 };
 
