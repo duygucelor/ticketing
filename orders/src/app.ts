@@ -3,10 +3,10 @@ import "express-async-errors";
 import { json } from "body-parser";
 import cookieSession from "cookie-session";
 import { errorHandler, NotFoundError,checkCurrentUser } from "@tixcuborg/common";
-import { createTicketRouter } from "./routes/create";
-import { getTicketByIdRouter } from "./routes/get";
-import {getAllTicketsRouter} from "./routes/getAll"
-import {updateTicketRouter} from './routes/update'
+import { createOrderRouter } from "./routes/create";
+import { getOrderByIdRouter } from "./routes/get";
+import {getAllOrdersRouter} from "./routes/getAll"
+import {deleteOrderRouter} from './routes/delete'
 
 const app = express();
 app.set("trust proxy", true);
@@ -21,10 +21,10 @@ app.use(
 
 app.use(checkCurrentUser)
 
-app.use(createTicketRouter)
-app.use(getTicketByIdRouter)
-app.use(getAllTicketsRouter)
-app.use(updateTicketRouter)
+app.use(createOrderRouter)
+app.use(getOrderByIdRouter)
+app.use(getAllOrdersRouter)
+app.use(deleteOrderRouter)
 
 app.all("*", async (req, res) => {
   throw new NotFoundError();
