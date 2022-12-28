@@ -6,6 +6,8 @@ import {
   requireAuth,
 } from "@tixcuborg/common";
 import { Order } from "../models/order";
+import { OrderCanceledPublisher } from "../events/publishers/orderCanceledPublisher";
+import { natsWrapper } from "../natsWrapper";
 
 const router = express.Router();
 
@@ -22,6 +24,14 @@ router.delete(
     }
     order.status = OrderStatus.Calceled;
     await order.save();
+
+    await new OrderCanceledPublisher(natsWrapper.client).publish({
+      id: order.id,
+      ticket: {
+        id: order.ticket.id,
+      },
+    });
+
     res.status(204).send(order);
   }
 );

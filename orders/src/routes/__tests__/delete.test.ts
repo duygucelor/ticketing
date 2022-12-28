@@ -4,6 +4,7 @@ import request from "supertest";
 import { app } from "../../app";
 import { Order } from "../../models/order";
 import { Ticket } from "../../models/ticket";
+import { natsWrapper } from "../../natsWrapper";
 
 const createTicket = async () => {
   const title = "concert";
@@ -60,4 +61,23 @@ it("returns 404 if there is no order", async () => {
     .delete(`/api/orders/${id}`)
     .set("Cookie", firstUser)
     .expect(404);
+});
+
+it("publishes an event", async () => {
+  const firstTicket = await createTicket();
+
+  const firstUser = global.signin();
+  const { body: firstOrder } = await request(app)
+    .post("/api/orders")
+    .set("Cookie", firstUser)
+    .send({ ticketId: firstTicket.id })
+    .expect(201);
+
+  await request(app)
+    .delete(`/api/orders/${firstOrder.id}`)
+    .set("Cookie", firstUser)
+    .send()
+    .expect(204);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });
