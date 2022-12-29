@@ -9,8 +9,9 @@ import { natsWrapper } from "../../natsWrapper";
 const createTicket = async () => {
   const title = "concert";
   const price = 40;
+  const id = new mongoose.Types.ObjectId().toHexString();
 
-  const ticket = Ticket.build({ title, price });
+  const ticket = Ticket.build({ id, title, price });
   await ticket.save();
 
   return ticket;
@@ -32,7 +33,7 @@ it("delete an order by id", async () => {
     .send()
     .expect(204);
 
-  const updatedOrder = await Order.findById(firstOrder.id)
+  const updatedOrder = await Order.findById(firstOrder.id);
 
   expect(updatedOrder!.status).toEqual(OrderStatus.Calceled);
 });
