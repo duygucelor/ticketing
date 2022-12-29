@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import {
+  BadRequestError,
   NotAuthorizedError,
   NotFoundError,
   requireAuth,
@@ -26,6 +27,9 @@ router.put(
     const ticket = await Ticket.findById(req.params.id);
     if (!ticket) {
       throw new NotFoundError();
+    }
+    if (ticket.orderId) {
+      throw new BadRequestError("Reserved ticket cannot be edited!");
     }
     if (ticket.userId !== req.currentUser!.id) {
       throw new NotAuthorizedError();

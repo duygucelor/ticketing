@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import request from "supertest";
 import { app } from "../../app";
+import { Ticket } from "../../models/ticket";
 import { natsWrapper } from "../../natsWrapper";
 
 it("i can update a ticket created by me with valid inputs", async () => {
@@ -21,9 +22,9 @@ it("i can update a ticket created by me with valid inputs", async () => {
 
   const ticket = await request(app)
     .get(`/api/tickets/${response.body.id}`)
-    .set("Cookie",cookie)
-    .send()
-    
+    .set("Cookie", cookie)
+    .send();
+
   expect(ticket.body.title).toEqual(title);
   expect(ticket.body.price).toEqual(price);
 });
@@ -100,7 +101,7 @@ it("t returns 404 if the ticket does not exist", async () => {
     .expect(404);
 });
 
-it("publishes an evenwt", async () => {
+it("publishes an event", async () => {
   const cookie = global.signin();
   const response = await request(app)
     .post("/api/tickets")
@@ -117,4 +118,29 @@ it("publishes an evenwt", async () => {
     .expect(200);
 
   expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
+
+it("rejects updating reserved ticket", async () => {
+  const cookie = global.signin();
+  const ticket = Ticket.build({
+    title: "concert",
+    price: 15,
+    userId: new mongoose.Types.ObjectId().toHexString(),
+  });
+
+  await ticket.save();
+
+  ticket.set({ orderId: new mongoose.Types.ObjectId().toHexString() });
+  await ticket.save();
+
+  const title = "Concert Coldplay";
+  const price = 400;
+  await request(app)
+    .put(`/api/tickets/${ticket.id}`)
+    .set("Cookie", cookie)
+    .send({
+      title,
+      price,
+    })
+    .expect(400);
 });
