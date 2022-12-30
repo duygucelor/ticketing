@@ -22,7 +22,7 @@ router.delete(
     if (order.userId !== req.currentUser!.id) {
       throw new NotAuthorizedError();
     }
-    order.status = OrderStatus.Calceled;
+    order.status = OrderStatus.Canceled;
     await order.save();
 
     await new OrderCanceledPublisher(natsWrapper.client).publish({

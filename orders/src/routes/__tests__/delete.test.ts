@@ -35,7 +35,7 @@ it("delete an order by id", async () => {
 
   const updatedOrder = await Order.findById(firstOrder.id);
 
-  expect(updatedOrder!.status).toEqual(OrderStatus.Calceled);
+  expect(updatedOrder!.status).toEqual(OrderStatus.Canceled);
 });
 
 it("returns 401 if it is not signedIn users order", async () => {
