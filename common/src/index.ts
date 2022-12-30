@@ -19,3 +19,4 @@ export * from "./events/domain/ticketUpdatedEvent";
 export * from "./events/domain/orderCreatedEvent";
 export * from "./events/domain/orderCanceledEvent";
 export * from "./events/domain/expirationCompleteEvent";
+export * from "./events/domain/paymentCreatedEvent";
